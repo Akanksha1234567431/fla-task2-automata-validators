@@ -1,0 +1,37 @@
+digraph G {
+  rankdir=LR;
+  bgcolor=white;
+  node [shape=circle, fontname="Helvetica", fontsize=12];
+  edge [fontname="Helvetica", fontsize=11];
+  labelloc=b; labeljust=l; fontname="Helvetica"; fontsize=11; label="Fig. 4  E-mail format DFA - minimal (9 states)\lAlphabet classes:\l  L = ASCII letter A-Z a-z\l  N = ASCII digit 0-9\l  P = underscore or plus ( _ + )\l  H = hyphen ( - )\l  . = dot\l  @ = at sign\l  X = any other character\lMoves into the dead (trap) state are omitted.\l";
+  __start [shape=point, width=0.15, label=""];
+  n0 [label="q0", shape=circle];
+  n1 [label="q1", shape=circle];
+  n2 [label="q2", shape=circle];
+  n3 [label="q3", shape=circle];
+  n4 [label="q4", shape=circle];
+  n5 [label="q5", shape=circle];
+  n6 [label="q6", shape=circle];
+  n7 [label="q7", shape=doublecircle];
+  __start -> n0;
+  n0 -> n1 [label="H, L, N, P"];
+  n1 -> n0 [label="."];
+  n1 -> n2 [label="@"];
+  n1 -> n1 [label="H, L, N, P"];
+  n2 -> n3 [label="L, N"];
+  n3 -> n4 [label="."];
+  n3 -> n5 [label="H"];
+  n3 -> n3 [label="L, N"];
+  n4 -> n6 [label="L"];
+  n4 -> n3 [label="N"];
+  n5 -> n5 [label="H"];
+  n5 -> n3 [label="L, N"];
+  n6 -> n4 [label="."];
+  n6 -> n5 [label="H"];
+  n6 -> n7 [label="L"];
+  n6 -> n3 [label="N"];
+  n7 -> n4 [label="."];
+  n7 -> n5 [label="H"];
+  n7 -> n7 [label="L"];
+  n7 -> n3 [label="N"];
+}

@@ -1,0 +1,71 @@
+{
+  "pin": {
+    "accept": ["0000", "1234", "4821", "9999", "0007", "5050", "7391", "0420"],
+    "reject": [
+      ["123", "too short (3 digits)"],
+      ["12345", "too long (5 digits)"],
+      ["", "empty input"],
+      ["12a4", "contains a letter"],
+      ["12 4", "contains a space"],
+      ["12.4", "contains a dot"],
+      ["-123", "contains a minus sign"],
+      ["1234\n", "trailing newline is not a digit (a classic regex `$` pitfall)"],
+      ["١٢٣٤", "non-ASCII (Arabic-Indic) digits; the alphabet is ASCII 0-9 only"]
+    ]
+  },
+  "email": {
+    "accept": [
+      "student@srmist.edu.in",
+      "john.doe@example.com",
+      "a_b+tag@mail.co",
+      "x@y.io",
+      "first-last@sub.domain.org",
+      "user123@site-name.net",
+      "A.B.C@d.ee",
+      "no-reply@a1.b2.example.org"
+    ],
+    "reject": [
+      ["plainaddress", "no @"],
+      ["@example.com", "empty local part"],
+      ["user@", "empty domain"],
+      ["user@domain", "domain has no dot"],
+      ["user@@example.com", "two @ signs"],
+      [".user@example.com", "local part starts with a dot"],
+      ["user.@example.com", "local part ends with a dot"],
+      ["us..er@example.com", "two consecutive dots"],
+      ["user@-example.com", "domain label starts with a hyphen"],
+      ["user@example-.com", "domain label ends with a hyphen"],
+      ["user@example.c", "TLD has only 1 letter"],
+      ["user@example.c0m", "TLD contains a digit"],
+      ["user name@example.com", "space in local part"],
+      ["user@exa mple.com", "space in domain"],
+      ["user@.example.com", "domain label is empty"]
+    ]
+  },
+  "password": {
+    "accept": [
+      "Passw0rd!",
+      "Abcdef1@",
+      "Srm#2026Fla",
+      "Zx9$Zx9$Zx9$Zx9$",
+      "N0t-So_Secret!",
+      "Tr1cky&Long#Pw",
+      "aB3$aB3$",
+      "Hello-World-2026"
+    ],
+    "reject": [
+      ["password", "no uppercase, digit or special character"],
+      ["PASSWORD1!", "no lowercase letter"],
+      ["Pass1!", "too short (6 characters)"],
+      ["Passw0rd", "no special character"],
+      ["Passw0rd!Passw0rd!", "too long (18 characters)"],
+      ["Zx9$Zx9$Zx9$Zx9$A", "too long (17 characters, one over the limit)"],
+      ["Pass word1!", "contains a space"],
+      ["Password!!", "no digit"],
+      ["passw0rd!", "no uppercase letter"],
+      ["", "empty input"],
+      ["Passw0rd!é", "non-ASCII character"],
+      ["Abcdef1", "7 characters (one under the minimum) and no special"]
+    ]
+  }
+}

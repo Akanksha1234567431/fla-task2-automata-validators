@@ -1,0 +1,361 @@
+==============================================================================
+ATM PIN: ATM PIN DFA (exactly 4 digits)  [6 states]
+==============================================================================
+
+--- accepted examples (8) ---
+  input   : '0000'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '1234'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '4821'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '9999'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '0007'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '5050'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '7391'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : '0420'  (length 4)
+  classes : D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4
+  verdict : ACCEPT  (ended in an accepting state)
+
+--- rejected examples (9) ---
+  (why it is invalid: too short (3 digits))
+  input   : '123'  (length 3)
+  classes : D D D
+  path    : q0 -> q1 -> q2 -> q3
+  verdict : REJECT  (input ended in non-accepting state q3: the string is a valid prefix but incomplete)
+
+  (why it is invalid: too long (5 digits))
+  input   : '12345'  (length 5)
+  classes : D D D D D
+  path    : q0 -> q1 -> q2 -> q3 -> q4 -> dead
+  verdict : REJECT  (entered the dead state at character 5: '5' can never lead to a valid string)
+
+  (why it is invalid: empty input)
+  input   : ''  (length 0)
+  classes : (empty string)
+  path    : q0
+  verdict : REJECT  (input ended in non-accepting state q0: the string is a valid prefix but incomplete)
+
+  (why it is invalid: contains a letter)
+  input   : '12a4'  (length 4)
+  classes : D D X D
+  path    : q0 -> q1 -> q2 -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 3: 'a' can never lead to a valid string)
+
+  (why it is invalid: contains a space)
+  input   : '12 4'  (length 4)
+  classes : D D X D
+  path    : q0 -> q1 -> q2 -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 3: ' ' can never lead to a valid string)
+
+  (why it is invalid: contains a dot)
+  input   : '12.4'  (length 4)
+  classes : D D X D
+  path    : q0 -> q1 -> q2 -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 3: '.' can never lead to a valid string)
+
+  (why it is invalid: contains a minus sign)
+  input   : '-123'  (length 4)
+  classes : X D D D
+  path    : q0 -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 1: '-' can never lead to a valid string)
+
+  (why it is invalid: trailing newline is not a digit (a classic regex `$` pitfall))
+  input   : '1234\n'  (length 5)
+  classes : D D D D X
+  path    : q0 -> q1 -> q2 -> q3 -> q4 -> dead
+  verdict : REJECT  (entered the dead state at character 5: '\n' can never lead to a valid string)
+
+  (why it is invalid: non-ASCII (Arabic-Indic) digits; the alphabet is ASCII 0-9 only)
+  input   : '١٢٣٤'  (length 4)
+  classes : X X X X
+  path    : q0 -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 1: '١' can never lead to a valid string)
+
+==============================================================================
+E-mail: E-mail DFA (minimal)  [9 states]
+==============================================================================
+
+--- accepted examples (8) ---
+  input   : 'student@srmist.edu.in'  (length 21)
+  classes : L L L L L L L @ L L L L L L . L L L . L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q4 -> q6 -> q7 -> q7 -> q4 -> q6 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'john.doe@example.com'  (length 20)
+  classes : L L L L . L L L @ L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q0 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q4 -> q6 -> q7 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'a_b+tag@mail.co'  (length 15)
+  classes : L P L P L L L @ L L L L . L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q4 -> q6 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'x@y.io'  (length 6)
+  classes : L @ L . L L
+  path    : q0 -> q1 -> q2 -> q3 -> q4 -> q6 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'first-last@sub.domain.org'  (length 25)
+  classes : L L L L L H L L L L @ L L L . L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q4 -> q6 -> q7 -> q7 -> q7 -> q7 -> q7 -> q4 -> q6 -> q7 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'user123@site-name.net'  (length 21)
+  classes : L L L L N N N @ L L L L H L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q5 -> q3 -> q3 -> q3 -> q3 -> q4 -> q6 -> q7 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'A.B.C@d.ee'  (length 10)
+  classes : L . L . L @ L . L L
+  path    : q0 -> q1 -> q0 -> q1 -> q0 -> q1 -> q2 -> q3 -> q4 -> q6 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'no-reply@a1.b2.example.org'  (length 26)
+  classes : L L H L L L L L @ L N . L N . L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q4 -> q6 -> q3 -> q4 -> q6 -> q7 -> q7 -> q7 -> q7 -> q7 -> q7 -> q4 -> q6 -> q7 -> q7
+  verdict : ACCEPT  (ended in an accepting state)
+
+--- rejected examples (15) ---
+  (why it is invalid: no @)
+  input   : 'plainaddress'  (length 12)
+  classes : L L L L L L L L L L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1 -> q1
+  verdict : REJECT  (input ended in non-accepting state q1: the string is a valid prefix but incomplete)
+
+  (why it is invalid: empty local part)
+  input   : '@example.com'  (length 12)
+  classes : @ L L L L L L L . L L L
+  path    : q0 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 1: '@' can never lead to a valid string)
+
+  (why it is invalid: empty domain)
+  input   : 'user@'  (length 5)
+  classes : L L L L @
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2
+  verdict : REJECT  (input ended in non-accepting state q2: the string is a valid prefix but incomplete)
+
+  (why it is invalid: domain has no dot)
+  input   : 'user@domain'  (length 11)
+  classes : L L L L @ L L L L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3
+  verdict : REJECT  (input ended in non-accepting state q3: the string is a valid prefix but incomplete)
+
+  (why it is invalid: two @ signs)
+  input   : 'user@@example.com'  (length 17)
+  classes : L L L L @ @ L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 6: '@' can never lead to a valid string)
+
+  (why it is invalid: local part starts with a dot)
+  input   : '.user@example.com'  (length 17)
+  classes : . L L L L @ L L L L L L L . L L L
+  path    : q0 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 1: '.' can never lead to a valid string)
+
+  (why it is invalid: local part ends with a dot)
+  input   : 'user.@example.com'  (length 17)
+  classes : L L L L . @ L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q0 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 6: '@' can never lead to a valid string)
+
+  (why it is invalid: two consecutive dots)
+  input   : 'us..er@example.com'  (length 18)
+  classes : L L . . L L @ L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q0 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 4: '.' can never lead to a valid string)
+
+  (why it is invalid: domain label starts with a hyphen)
+  input   : 'user@-example.com'  (length 17)
+  classes : L L L L @ H L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 6: '-' can never lead to a valid string)
+
+  (why it is invalid: domain label ends with a hyphen)
+  input   : 'user@example-.com'  (length 17)
+  classes : L L L L @ L L L L L L L H . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q5 -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 14: '.' can never lead to a valid string)
+
+  (why it is invalid: TLD has only 1 letter)
+  input   : 'user@example.c'  (length 14)
+  classes : L L L L @ L L L L L L L . L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q4 -> q6
+  verdict : REJECT  (input ended in non-accepting state q6: the string is a valid prefix but incomplete)
+
+  (why it is invalid: TLD contains a digit)
+  input   : 'user@example.c0m'  (length 16)
+  classes : L L L L @ L L L L L L L . L N L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q3 -> q4 -> q6 -> q3 -> q3
+  verdict : REJECT  (input ended in non-accepting state q3: the string is a valid prefix but incomplete)
+
+  (why it is invalid: space in local part)
+  input   : 'user name@example.com'  (length 21)
+  classes : L L L L X L L L L @ L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 5: ' ' can never lead to a valid string)
+
+  (why it is invalid: space in domain)
+  input   : 'user@exa mple.com'  (length 17)
+  classes : L L L L @ L L L X L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> q3 -> q3 -> q3 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 9: ' ' can never lead to a valid string)
+
+  (why it is invalid: domain label is empty)
+  input   : 'user@.example.com'  (length 17)
+  classes : L L L L @ . L L L L L L L . L L L
+  path    : q0 -> q1 -> q1 -> q1 -> q1 -> q2 -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 6: '.' can never lead to a valid string)
+
+==============================================================================
+Password: Password DFA (minimal)  [197 states]
+==============================================================================
+
+--- accepted examples (8) ---
+  input   : 'Passw0rd!'  (length 9)
+  classes : U L L L L D L L S
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q64 -> q79 -> q94 -> q111
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'Abcdef1@'  (length 8)
+  classes : U L L L L L D S
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q69 -> q79 -> q96
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'Srm#2026Fla'  (length 11)
+  classes : U L L S D D D D U L L
+  path    : q0 -> q4 -> q11 -> q24 -> q40 -> q51 -> q66 -> q81 -> q96 -> q111 -> q126 -> q141
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'Zx9$Zx9$Zx9$Zx9$'  (length 16)
+  classes : U L D S U L D S U L D S U L D S
+  path    : q0 -> q4 -> q11 -> q20 -> q36 -> q51 -> q66 -> q81 -> q96 -> q111 -> q126 -> q141 -> q156 -> q171 -> q185 -> q193 -> q195
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'N0t-So_Secret!'  (length 14)
+  classes : U D L S U L S U L L L L L S
+  path    : q0 -> q4 -> q8 -> q20 -> q36 -> q51 -> q66 -> q81 -> q96 -> q111 -> q126 -> q141 -> q156 -> q171 -> q185
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'Tr1cky&Long#Pw'  (length 14)
+  classes : U L D L L L S U L L L S U L
+  path    : q0 -> q4 -> q11 -> q20 -> q34 -> q49 -> q64 -> q81 -> q96 -> q111 -> q126 -> q141 -> q156 -> q171 -> q185
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'aB3$aB3$'  (length 8)
+  classes : L U D S L U D S
+  path    : q0 -> q2 -> q11 -> q20 -> q36 -> q51 -> q66 -> q81 -> q96
+  verdict : ACCEPT  (ended in an accepting state)
+
+  input   : 'Hello-World-2026'  (length 16)
+  classes : U L L L L S U L L L L S D D D D
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q70 -> q85 -> q100 -> q115 -> q130 -> q145 -> q160 -> q171 -> q185 -> q193 -> q195
+  verdict : ACCEPT  (ended in an accepting state)
+
+--- rejected examples (12) ---
+  (why it is invalid: no uppercase, digit or special character)
+  input   : 'password'  (length 8)
+  classes : L L L L L L L L
+  path    : q0 -> q2 -> q9 -> q22 -> q37 -> q52 -> q67 -> q82 -> q97
+  verdict : REJECT  (input ended in non-accepting state q97: the string is a valid prefix but incomplete)
+
+  (why it is invalid: no lowercase letter)
+  input   : 'PASSWORD1!'  (length 10)
+  classes : U U U U U U U U D S
+  path    : q0 -> q4 -> q14 -> q28 -> q43 -> q58 -> q73 -> q88 -> q103 -> q107 -> q125
+  verdict : REJECT  (input ended in non-accepting state q125: the string is a valid prefix but incomplete)
+
+  (why it is invalid: too short (6 characters))
+  input   : 'Pass1!'  (length 6)
+  classes : U L L L D S
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q49 -> q66
+  verdict : REJECT  (input ended in non-accepting state q66: the string is a valid prefix but incomplete)
+
+  (why it is invalid: no special character)
+  input   : 'Passw0rd'  (length 8)
+  classes : U L L L L D L L
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q64 -> q79 -> q94
+  verdict : REJECT  (input ended in non-accepting state q94: the string is a valid prefix but incomplete)
+
+  (why it is invalid: too long (18 characters))
+  input   : 'Passw0rd!Passw0rd!'  (length 18)
+  classes : U L L L L D L L S U L L L L D L L S
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q64 -> q79 -> q94 -> q111 -> q126 -> q141 -> q156 -> q171 -> q185 -> q193 -> q195 -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 17: 'd' can never lead to a valid string)
+
+  (why it is invalid: too long (17 characters, one over the limit))
+  input   : 'Zx9$Zx9$Zx9$Zx9$A'  (length 17)
+  classes : U L D S U L D S U L D S U L D S U
+  path    : q0 -> q4 -> q11 -> q20 -> q36 -> q51 -> q66 -> q81 -> q96 -> q111 -> q126 -> q141 -> q156 -> q171 -> q185 -> q193 -> q195 -> dead
+  verdict : REJECT  (entered the dead state at character 17: 'A' can never lead to a valid string)
+
+  (why it is invalid: contains a space)
+  input   : 'Pass word1!'  (length 11)
+  classes : U L L L X L L L L D S
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> dead -> dead -> dead -> dead -> dead -> dead -> dead
+  verdict : REJECT  (entered the dead state at character 5: ' ' can never lead to a valid string)
+
+  (why it is invalid: no digit)
+  input   : 'Password!!'  (length 10)
+  classes : U L L L L L L L S S
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q69 -> q84 -> q99 -> q115 -> q130
+  verdict : REJECT  (input ended in non-accepting state q130: the string is a valid prefix but incomplete)
+
+  (why it is invalid: no uppercase letter)
+  input   : 'passw0rd!'  (length 9)
+  classes : L L L L L D L L S
+  path    : q0 -> q2 -> q9 -> q22 -> q37 -> q52 -> q60 -> q75 -> q90 -> q108
+  verdict : REJECT  (input ended in non-accepting state q108: the string is a valid prefix but incomplete)
+
+  (why it is invalid: empty input)
+  input   : ''  (length 0)
+  classes : (empty string)
+  path    : q0
+  verdict : REJECT  (input ended in non-accepting state q0: the string is a valid prefix but incomplete)
+
+  (why it is invalid: non-ASCII character)
+  input   : 'Passw0rd!é'  (length 10)
+  classes : U L L L L D L L S X
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q64 -> q79 -> q94 -> q111 -> dead
+  verdict : REJECT  (entered the dead state at character 10: 'é' can never lead to a valid string)
+
+  (why it is invalid: 7 characters (one under the minimum) and no special)
+  input   : 'Abcdef1'  (length 7)
+  classes : U L L L L L D
+  path    : q0 -> q4 -> q11 -> q24 -> q39 -> q54 -> q69 -> q79
+  verdict : REJECT  (input ended in non-accepting state q79: the string is a valid prefix but incomplete)
+
+==============================================================================
+ATM retry limiter (events from the bank back-end)
+==============================================================================
+  ok               fail0 -> AUTH  => AUTHENTICATED
+  bad ok           fail0 -> fail1 -> AUTH  => AUTHENTICATED
+  bad bad ok       fail0 -> fail1 -> fail2 -> AUTH  => AUTHENTICATED
+  bad bad bad ok   fail0 -> fail1 -> fail2 -> LOCKED -> LOCKED  => NOT authenticated

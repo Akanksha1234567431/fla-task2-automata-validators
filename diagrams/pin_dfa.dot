@@ -1,0 +1,18 @@
+digraph G {
+  rankdir=LR;
+  bgcolor=white;
+  node [shape=circle, fontname="Helvetica", fontsize=12];
+  edge [fontname="Helvetica", fontsize=11];
+  labelloc=b; labeljust=l; fontname="Helvetica"; fontsize=11; label="Fig. 1  ATM PIN DFA   L = D^4\lAlphabet classes:\l  D = ASCII digit 0-9\l  X = any other character\lMoves into the dead (trap) state are omitted.\l";
+  __start [shape=point, width=0.15, label=""];
+  n0 [label="q0", shape=circle];
+  n1 [label="q1", shape=circle];
+  n2 [label="q2", shape=circle];
+  n3 [label="q3", shape=circle];
+  n4 [label="q4", shape=doublecircle];
+  __start -> n0;
+  n0 -> n1 [label="D"];
+  n1 -> n2 [label="D"];
+  n2 -> n3 [label="D"];
+  n3 -> n4 [label="D"];
+}

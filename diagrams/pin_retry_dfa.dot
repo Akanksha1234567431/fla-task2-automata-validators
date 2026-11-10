@@ -1,0 +1,19 @@
+digraph G {
+  rankdir=LR;
+  bgcolor=white;
+  node [shape=circle, fontname="Helvetica", fontsize=12];
+  edge [fontname="Helvetica", fontsize=11];
+  labelloc=b; labeljust=l; fontname="Helvetica"; fontsize=11; label="Fig. 2  ATM retry limiter (events from the bank)\lAlphabet classes:\l  ok = PIN matched (bank said yes)\l  bad = PIN did not match (bank said no)\lMoves into the dead (trap) state are omitted.\l";
+  __start [shape=point, width=0.15, label=""];
+  n0 [label="fail0", shape=circle];
+  n1 [label="fail1", shape=circle];
+  n2 [label="AUTH", shape=doublecircle];
+  n3 [label="fail2", shape=circle];
+  __start -> n0;
+  n0 -> n1 [label="bad"];
+  n0 -> n2 [label="ok"];
+  n1 -> n3 [label="bad"];
+  n1 -> n2 [label="ok"];
+  n2 -> n2 [label="bad, ok"];
+  n3 -> n2 [label="ok"];
+}
